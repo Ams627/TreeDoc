@@ -1,0 +1,43 @@
+:toc:
+:sectnums:
+:toclevels: 5
+:sectnumlevels: 5
+:showcomments:
+:xrefstyle: short
+:icons: font
+:source-highlighter: coderay
+:tick: &#x2714;
+:pound: &#xA3;
+
+= Tree view of a document
+
+An XML document consists of zero or more XML comments, an XML element called the root element, followed by zero or more XML comments.
+
+Any XML element contains
+* a name (immediately following the opening angle bracket
+* a list of attributes (key-value pairs)
+* a list of sub-elements (which are also XML elements)
+* contents for the element
+
+A markdown document has a _similar_ structure. It has a root node.
+
+All nodes have the following items in the exact order specicied:
+* A title.
+    ** The title is mandatory.
+    ** The title of the root node is always the empty string.
+    ** The title of all nodes except the root node is non-empty.
+* Text content.
+* Zero or more child nodes.
+
+A node's title must be marked with a line starting with one or more equals signs ('='). A child 
+node's title has one more equals sign than its parent node. Since the root node's title 
+must be the empty string, it cannot be marked in the document. Child nodes of the root node
+have a title marked by a single equals sign.
+
+
+[source,csharp]
+----
+using System;
+using System.Text;
+----
+
