@@ -22,6 +22,7 @@ Any XML element contains
 A markdown document has a _similar_ structure. It has a root node.
 
 All nodes have the following items in the exact order specicied:
+
 * A title.
     ** The title is mandatory.
     ** The title of the root node is always the empty string.
