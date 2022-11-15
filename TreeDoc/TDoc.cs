@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Xml.Linq;
 
 namespace TreeDoc;
@@ -25,13 +26,23 @@ class TDoc
         
         while ((line = reader.ReadLine()) != null)
         {
+            if (line.Contains("Back"))
+            {
+                global::System.Console.WriteLine();
+            }
             var nextLevel = 0;
             int i = 0;
+            string title = "";
             while (i < line.Length)
             {
                 if (line[i++] == '=')
                 {
                     nextLevel++;
+                }
+                else
+                {
+                    title = line[i..].Trim();
+                    break;
                 }
             }
 
@@ -41,25 +52,24 @@ class TDoc
             }
             else if (nextLevel < currentLevel)
             {
-
+                currentElement?.Add(GetContent(currentContent));
+                var element = GetElement(nextLevel - 1, title);
+                var appropriateAncestorr = GetAncestor(currentElement, currentLevel - nextLevel + 1);
+                appropriateAncestorr?.Add(element);
             }
             else if (nextLevel == currentLevel)
             {
-                currentElement.Add(currentContent.ToString().Trim());
-                var elementName = $"L{currentLevel - 1}";
-                var element = new XElement(elementName);
+                currentElement?.Add(GetContent(currentContent));
+                var element = GetElement(nextLevel - 1, title);
                 currentElement?.AddAfterSelf(element);
                 currentElement = element;
-                currentContent.Clear();
             }
             else if (nextLevel == currentLevel + 1)
             {
-                var elementName = $"L{currentLevel}";
-                var element = new XElement(elementName);
-                currentElement.Add(element);
-                currentElement.Add(currentContent.ToString().Trim());
+                currentElement?.Add(GetContent(currentContent));
+                var element = GetElement(currentLevel, title);
+                currentElement?.Add(element);
                 currentElement = element;
-                currentContent.Clear();
                 currentLevel = nextLevel;
             }
             else if (nextLevel > currentLevel)
@@ -75,6 +85,31 @@ class TDoc
 
         var doc = new TDoc(xdoc);
         return doc;
+    }
+
+    private static XElement GetContent(StringBuilder currentContent)
+    {
+        var xelement =  new XElement("C", currentContent.ToString().Trim());
+        currentContent.Clear();
+        return xelement;
+    }
+
+    private static XElement? GetAncestor(XElement? currentElement, int levelsBack)
+    {
+        while (levelsBack-- > 0)
+        {
+            currentElement = currentElement?.Parent;
+        }
+        return currentElement;
+    }
+
+    private static XElement GetElement(int currentLevel, string title)
+    {
+        var elementName = $"L{currentLevel}";
+        var titleAttribute = string.IsNullOrEmpty(title) ? null : new XAttribute("title", title);
+        var element = new XElement(elementName, titleAttribute);
+        return element;
+
     }
 
     public XDocument Content => _content;
