@@ -35,6 +35,9 @@ node's title has one more equals sign than its parent node. Since the root node'
 must be the empty string, it cannot be marked in the document. Child nodes of the root node
 have a title marked by a single equals sign.
 
+== Converting a document tree to XML
+
+The root node of the generated XML document is <Document>
 
 [source,csharp]
 ----

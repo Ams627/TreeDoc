@@ -7,6 +7,7 @@
     <DebugType>Embedded</DebugType>
     <SelfContained>False</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
+    <Nullable>Enable</Nullable>
     <ImplicitUsings>Enable</ImplicitUsings>
   </PropertyGroup>
 </Project>
